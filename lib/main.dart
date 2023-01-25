@@ -19,7 +19,51 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String _card = '1H';
+  int _currentSuitIndex = 0;
+  int _currentValueIndex = 0;
+  final List<String> _suits = ['H', 'S', 'D', 'C'];
+
+  final List<String> _cardValues = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10'
+  ];
+
+  void _incrementValue() {
+    setState(() {
+      _currentValueIndex = (_currentValueIndex + 1) % 10;
+      _card = "${_cardValues[_currentValueIndex]}${_suits[_currentSuitIndex]}";
+    });
+  }
+
+  void _decrementValue() {
+    setState(() {
+      _currentValueIndex = (_currentValueIndex - 1) % 10;
+      _card = "${_cardValues[_currentValueIndex]}${_suits[_currentSuitIndex]}";
+    });
+  }
+
+  void _cycleSuits() {
+    setState(() {
+      _currentSuitIndex = (_currentSuitIndex + 1) % 4;
+      _card = "${_cardValues[_currentValueIndex]}${_suits[_currentSuitIndex]}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,59 +71,24 @@ class MyHomePage extends StatelessWidget {
         title: Text('Card Converter'),
       ),
       body: Center(
-        child: CardConverter(card: '10H'),
+        child: Column(
+          children: <Widget>[
+            ElevatedButton(
+              child: Text('Increase Value'),
+              onPressed: _incrementValue,
+            ),
+            ElevatedButton(
+              child: Text('Decrease Value'),
+              onPressed: _decrementValue,
+            ),
+            ElevatedButton(
+              child: Text('Cycle Suits'),
+              onPressed: _cycleSuits,
+            ),
+            CardConverter(card: _card)
+          ],
+        ),
       ),
     );
   }
 }
-
-/*[
-        [0],
-        [1],
-        [0],
-      ],
-      [
-        [0,0],
-        [1, 1],
-        [0,0],
-      ],
-      [
-        [0, 0, 1],
-        [0, 1, 0],
-        [1, 0, 0],
-      ],
-      [
-        [1, 0, 1],
-        [0, 0, 0],
-        [1, 0, 1],
-      ],
-      [
-        [1, 0, 1],
-        [0, 1, 0],
-        [1, 0, 1],
-      ],
-      [
-        [1, 1, 1],
-        [0, 0, 0],
-        [1, 1, 1],
-      ],
-      [
-        [1, 1, 1],
-        [0, 0, 1,0],
-        [1, 1, 1],
-      ],
-      [
-        [1, 1, 1, 1],
-        [0, 0, 0],
-        [1, 1, 1, 1],
-      ],
-      [
-        [1, 1, 1, 1],
-        [0, 1, 0],
-        [1, 1, 1, 1],
-      ],[
-        [1, 1, 1, 1],
-        [ 1, 1],
-        [1, 1, 1, 1],
-      ]
-    ]*/

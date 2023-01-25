@@ -1,68 +1,65 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CardConverter extends StatelessWidget {
   final String card;
 
+  List<List<List<int>>> cardArray = [
+    [
+      [0],
+      [1],
+      [0],
+    ],
+    [
+      [0],
+      [1, 1],
+      [0],
+    ],
+    [
+      [0, 0, 1],
+      [0, 1, 0],
+      [1, 0, 0],
+    ],
+    [
+      [1, 0, 1],
+      [0, 0, 0],
+      [1, 0, 1],
+    ],
+    [
+      [1, 0, 1],
+      [0, 1, 0],
+      [1, 0, 1],
+    ],
+    [
+      [1, 1, 1],
+      [0, 0, 0],
+      [1, 1, 1],
+    ],
+    [
+      [1, 1, 1],
+      [0, 1, 0, 0],
+      [1, 1, 1],
+    ],
+    [
+      [1, 1, 1, 1],
+      [0, 0, 0],
+      [1, 1, 1, 1],
+    ],
+    [
+      [1, 1, 1, 1],
+      [0, 1, 0],
+      [1, 1, 1, 1],
+    ],
+    [
+      [1, 1, 1, 1],
+      [1, 1],
+      [1, 1, 1, 1],
+    ]
+  ];
   CardConverter({required this.card});
 
   @override
   Widget build(BuildContext context) {
-    List<List<List<int>>> cardArray = [
-      [
-        [0],
-        [1],
-        [0],
-      ],
-      [
-        [0],
-        [1, 1],
-        [0],
-      ],
-      [
-        [0, 0, 1],
-        [0, 1, 0],
-        [1, 0, 0],
-      ],
-      [
-        [1, 0, 1],
-        [0, 0, 0],
-        [1, 0, 1],
-      ],
-      [
-        [1, 0, 1],
-        [0, 1, 0],
-        [1, 0, 1],
-      ],
-      [
-        [1, 1, 1],
-        [0, 0, 0],
-        [1, 1, 1],
-      ],
-      [
-        [1, 1, 1],
-        [0, 1, 0, 0],
-        [1, 1, 1],
-      ],
-      [
-        [1, 1, 1, 1],
-        [0, 0, 0],
-        [1, 1, 1, 1],
-      ],
-      [
-        [1, 1, 1, 1],
-        [0, 1, 0],
-        [1, 1, 1, 1],
-      ],
-      [
-        [1, 1, 1, 1],
-        [1, 1],
-        [1, 1, 1, 1],
-      ]
-    ];
-    int visible = 0;
     String number = card[0];
     String suit = card[1];
     if (card.length > 2) {
@@ -70,44 +67,30 @@ class CardConverter extends StatelessWidget {
       suit = card[2];
     }
     ;
-    Color suitColor = Colors.black;
-    IconData suitIcon = Icons.favorite;
+
+    final Map<String, Map<String, dynamic>> _suits = {
+      'C': {'color': Colors.black, 'icon': 'assets/icons/025-clubs.svg'},
+      'D': {'color': Colors.red, 'icon': 'assets/icons/026-diamonds.svg'},
+      'H': {'color': Colors.red, 'icon': 'assets/icons/219-heart.svg'},
+      'S': {'color': Colors.black, 'icon': 'assets/icons/024-spades.svg'},
+    };
+
+    double centerIconScale = 41;
+    final Map<String, dynamic>? _suit = _suits[suit];
+    final suitColor = _suit!['color'];
+    final suitIcon =
+        SvgPicture.asset(_suit['icon'], height: centerIconScale, color: suitColor);
+
     int cANum = int.parse(number) - 1;
 
-  print(number);
-  print(suit);
     Widget buildIcon(visible) {
-      return Container(
-          // height: MediaQuery.of(context).size.height * 0.1,
-          child: Center(
-        child: Icon(
-          visible == 1 ? suitIcon : null,
-          color: suitColor,
-          size: 45.0,
-        ),
-      ));
-    }
-
-    switch (suit) {
-      case 'C':
-        suitColor = Colors.black;
-        suitIcon = FontAwesomeIcons.heartCircleCheck;
-        break;
-      case 'D':
-        suitColor = Colors.red;
-        suitIcon = FontAwesomeIcons.diamond;
-        break;
-      case 'H':
-        suitColor = Colors.red;
-        suitIcon = Icons.favorite;
-        break;
-      case 'S':
-        suitColor = Colors.black;
-        suitIcon = Icons.local_offer;
-        break;
+      return Center(
+        child: visible == 0 ? null : suitIcon,
+      );
     }
 
     return Container(
+      padding: EdgeInsets.all(10),
       width: 250,
       height: 350,
       decoration: BoxDecoration(
@@ -116,81 +99,67 @@ class CardConverter extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
-            offset: Offset(0.0, 1.5),
-            blurRadius: 1.5,
+            color: Color.fromARGB(122, 0, 0, 0),
+            offset: Offset(9.0, 13.5),
+            blurRadius: 8.5,
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Column(
+              children: [
+                Text(
+                  number,
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: suitColor,
+                  ),
+                ),
+                Container(child: suitIcon, width: 30,),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(17.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (int i = 0; i < 3; i++)
+                  Column(
+                    children: [
+                      for (int j = 0; j < cardArray[cANum][i].length; j++)
+                        Expanded(child: buildIcon(cardArray[cANum][i][j])),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Transform.rotate(
+              angle: 3.14,
               child: Column(
                 children: [
                   Text(
                     number,
                     style: TextStyle(
-                      fontSize: 24.0,
+                      fontSize: 30.0,
                       color: suitColor,
                     ),
                   ),
-                  Icon(
-                    suitIcon,
-                    color: suitColor,
-                    size: 26.0,
+                  Transform(
+                    transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+                    alignment: Alignment.center,
+                    child: Container(child: suitIcon, width: 30,),
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (int i = 0; i < 3; i++)
-                    SizedBox(
-                        width: 50,
-                        child: Column(
-                          children: [
-                            for (int j = 0; j < cardArray[cANum][i].length; j++)
-                              Expanded(
-                                  child: buildIcon(cardArray[cANum][i][j])),
-                          ],
-                        )),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Transform.rotate(
-                angle: 3.14,
-                child: Column(
-                  children: [
-                    Text(
-                      number,
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        color: suitColor,
-                      ),
-                    ),
-                    Transform(
-                      transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        suitIcon,
-                        color: suitColor,
-                        size: 26.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
