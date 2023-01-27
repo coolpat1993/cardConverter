@@ -25,7 +25,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _card = 'KH';
+  String _card = 'AH';
   int _currentSuitIndex = 0;
   int _currentValueIndex = 0;
   final List<String> _suits = ['H', 'S', 'D', 'C'];

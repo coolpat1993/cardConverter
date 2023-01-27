@@ -156,20 +156,36 @@ class CardConverter extends StatelessWidget {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        for (int i = 0; i < 3; i++)
-                          Column(
-                            children: [
-                              for (int j = 0;
-                                  j <
-                                      cardArray[int.parse(number) - 1][i]
-                                          .length;
-                                  j++)
-                                Expanded(
-                                    child: buildIcon(
-                                        cardArray[int.parse(number) - 1][i]
-                                            [j])),
-                            ],
-                          ),
+                        Column(
+                          children: [
+                            for (int j = 0;
+                                j < cardArray[int.parse(number) - 1][0].length;
+                                j++)
+                              Expanded(
+                                  child: buildIcon(
+                                      cardArray[int.parse(number) - 1][0][j])),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            for (int j = 0;
+                                j < cardArray[int.parse(number) - 1][1].length;
+                                j++)
+                              Expanded(
+                                  child: buildIcon(
+                                      cardArray[int.parse(number) - 1][1][j])),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            for (int j = 0;
+                                j < cardArray[int.parse(number) - 1][2].length;
+                                j++)
+                              Expanded(
+                                  child: buildIcon(
+                                      cardArray[int.parse(number) - 1][2][j])),
+                          ],
+                        )
                       ],
                     )
                   : Align(alignment: Alignment.center, child: svgs[number])),
