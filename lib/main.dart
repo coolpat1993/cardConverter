@@ -25,13 +25,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _card = '1H';
+  String _card = 'KH';
   int _currentSuitIndex = 0;
   int _currentValueIndex = 0;
   final List<String> _suits = ['H', 'S', 'D', 'C'];
 
   final List<String> _cardValues = [
-    '1',
+    'A',
     '2',
     '3',
     '4',
@@ -40,19 +40,22 @@ class _MyHomePageState extends State<MyHomePage> {
     '7',
     '8',
     '9',
-    '10'
+    '10',
+    'J',
+    'Q',
+    'K'
   ];
 
   void _incrementValue() {
     setState(() {
-      _currentValueIndex = (_currentValueIndex + 1) % 10;
+      _currentValueIndex = (_currentValueIndex + 1) % 13;
       _card = "${_cardValues[_currentValueIndex]}${_suits[_currentSuitIndex]}";
     });
   }
 
   void _decrementValue() {
     setState(() {
-      _currentValueIndex = (_currentValueIndex - 1) % 10;
+      _currentValueIndex = (_currentValueIndex - 1) % 13;
       _card = "${_cardValues[_currentValueIndex]}${_suits[_currentSuitIndex]}";
     });
   }

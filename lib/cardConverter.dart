@@ -60,6 +60,13 @@ class CardConverter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isNumeric(String s) {
+      if (s == null) {
+        return false;
+      }
+      return double.tryParse(s) != null;
+    }
+
     String number = card[0];
     String suit = card[1];
     if (card.length > 2) {
@@ -78,10 +85,28 @@ class CardConverter extends StatelessWidget {
     double centerIconScale = 41;
     final Map<String, dynamic>? _suit = _suits[suit];
     final suitColor = _suit!['color'];
-    final suitIcon =
-        SvgPicture.asset(_suit['icon'], height: centerIconScale, color: suitColor);
+    final suitIcon = SvgPicture.asset(_suit['icon'],
+        height: centerIconScale, color: suitColor);
 
-    int cANum = int.parse(number) - 1;
+    SvgPicture createSvg(String filePath, Color color, [double? height]) {
+      return SvgPicture.asset(filePath, color: color, height: height);
+    }
+
+    Map<String, SvgPicture> svgs = {
+      'K': createSvg('assets/icons/King.svg', suitColor),
+      'Q': createSvg('assets/icons/Queen.svg', suitColor, 230),
+      'J': createSvg('assets/icons/Jack.svg', suitColor, 230),
+      'A': createSvg(
+          suit == 'C'
+              ? 'assets/icons/Clubs.svg'
+              : suit == 'S'
+                  ? 'assets/icons/Spades.svg'
+                  : suit == 'H'
+                      ? 'assets/icons/Heart.svg'
+                      : 'assets/icons/Diamonds.svg',
+          suitColor,
+          230)
+    };
 
     Widget buildIcon(visible) {
       return Center(
@@ -118,25 +143,36 @@ class CardConverter extends StatelessWidget {
                     color: suitColor,
                   ),
                 ),
-                Container(child: suitIcon, width: 30,),
+                Container(
+                  child: suitIcon,
+                  width: 30,
+                ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(17.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (int i = 0; i < 3; i++)
-                  Column(
-                    children: [
-                      for (int j = 0; j < cardArray[cANum][i].length; j++)
-                        Expanded(child: buildIcon(cardArray[cANum][i][j])),
-                    ],
-                  ),
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.all(17.0),
+              child: isNumeric(number)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        for (int i = 0; i < 3; i++)
+                          Column(
+                            children: [
+                              for (int j = 0;
+                                  j <
+                                      cardArray[int.parse(number) - 1][i]
+                                          .length;
+                                  j++)
+                                Expanded(
+                                    child: buildIcon(
+                                        cardArray[int.parse(number) - 1][i]
+                                            [j])),
+                            ],
+                          ),
+                      ],
+                    )
+                  : Align(alignment: Alignment.center, child: svgs[number])),
           Align(
             alignment: Alignment.bottomRight,
             child: Transform.rotate(
@@ -153,7 +189,10 @@ class CardConverter extends StatelessWidget {
                   Transform(
                     transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
                     alignment: Alignment.center,
-                    child: Container(child: suitIcon, width: 30,),
+                    child: SizedBox(
+                      width: 30,
+                      child: suitIcon,
+                    ),
                   ),
                 ],
               ),
