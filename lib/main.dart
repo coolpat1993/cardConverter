@@ -25,6 +25,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  double _scale = 1;
   String _card = 'AH';
   int _currentSuitIndex = 0;
   int _currentValueIndex = 0;
@@ -67,6 +68,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _incrementScale() {
+    setState(() {
+      _scale = _scale + .1;
+    });
+  }
+  void _decrementScale() {
+    setState(() {
+      _scale = _scale - .1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +100,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Cycle Suits'),
               onPressed: _cycleSuits,
             ),
-            CardConverter(card: _card)
+            ElevatedButton(
+              child: Text('_incrementScale'),
+              onPressed: _incrementScale,
+            ),
+            ElevatedButton(
+              child: Text('_decrementScale'),
+              onPressed: _decrementScale,
+            ),
+            CardConverter(card: _card, scale: _scale, shadow: 100)
           ],
         ),
       ),
